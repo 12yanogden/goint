@@ -40,11 +40,11 @@ func getType(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	unsignedType := calcUnsignedType(max)
-	signedType := calcSignedType(max)
+	unsignedType, unsignedRange := calcUnsignedType(max)
+	signedType, signedRange := calcSignedType(max)
 
-	fmt.Printf("Signed: %s\n", signedType)
-	fmt.Printf("Unsigned: %s\n", unsignedType)
+	fmt.Printf("Signed: %s (%s)\n", signedType, unsignedRange)
+	fmt.Printf("Unsigned: %s (%s)\n", unsignedType, signedRange)
 
 	fmt.Println()
 
@@ -52,37 +52,38 @@ func getType(cmd *cobra.Command, args []string) {
 	fmt.Printf("Copied '%s' to your clipboard.\n\n", unsignedType)
 }
 
-func calcUnsignedType(max int) string {
+// Return the type and range of that type
+func calcUnsignedType(max int) (string, string) {
 	switch {
 	case max < 0:
 		break
 	case max <= 255:
-		return "uint8"
+		return "uint8", "0 - 255"
 	case max <= 65535:
-		return "uint16"
+		return "uint16", "0 - 65535"
 	case max <= 4294967295:
-		return "uint32"
+		return "uint32", "0	- 4294967295"
 	// uint64 can reach 18446744073709551615, but the 'max' signed int can't
 	case max <= 9223372036854775807:
-		return "uint64"
+		return "uint64", "0	- 9223372036854775807"
 	}
 
-	return "Out of range"
+	return "Out of range", "N/A"
 }
 
-func calcSignedType(max int) string {
+func calcSignedType(max int) (string, string) {
 	switch {
 	case max >= -128 && max <= 127:
-		return "int8"
+		return "int8", "-128 - 127"
 	case max >= -32768 && max <= 32767:
-		return "int16"
+		return "int16", "-32768 - 32767"
 	case max >= -2147483648 && max <= 2147483647:
-		return "int32"
+		return "int32", "-2147483648 - 2147483647"
 	case max >= -9223372036854775808 && max <= 9223372036854775807:
-		return "int64"
+		return "int64", "-9223372036854775808 - 9223372036854775807"
 	}
 
-	return "Out of range"
+	return "Out of range", "N/A"
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
