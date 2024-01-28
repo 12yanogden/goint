@@ -43,8 +43,8 @@ func getType(cmd *cobra.Command, args []string) {
 	unsignedType, unsignedRange := calcUnsignedType(max)
 	signedType, signedRange := calcSignedType(max)
 
-	fmt.Printf("Signed: %s (%s)\n", signedType, unsignedRange)
-	fmt.Printf("Unsigned: %s (%s)\n", unsignedType, signedRange)
+	fmt.Printf("Unsigned: %s (%s)\n", unsignedType, unsignedRange)
+	fmt.Printf("Signed: %s (%s)\n", signedType, signedRange)
 
 	fmt.Println()
 
